@@ -1643,6 +1643,33 @@ pub mod gl {
                 Gl::Gles(gles) => unsafe { gles.UseProgram(program) },
             }
         }
+
+        pub fn blit_framebuffer(
+            &self,
+            src_x0: GLint,
+            src_y0: GLint,
+            src_x1: GLint,
+            src_y1: GLint,
+            dst_x0: GLint,
+            dst_y0: GLint,
+            dst_x1: GLint,
+            dst_y1: GLint,
+            mask: GLbitfield,
+            filter: GLenum,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.BlitFramebuffer(
+                        src_x0, src_y0, src_x1, src_y1, dst_x0, dst_y0, dst_x1, dst_y1, mask, filter,
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.BlitFramebuffer(
+                        src_x0, src_y0, src_x1, src_y1, dst_x0, dst_y0, dst_x1, dst_y1, mask, filter,
+                    )
+                },
+            }
+        }
     }
 
     fn calculate_length(
