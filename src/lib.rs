@@ -1126,8 +1126,8 @@ pub mod gl {
         pub fn get_tex_parameter_fv(&self, target: GLenum, pname: GLenum) -> GLfloat {
             let mut result = 0.;
             match self {
-                Gl::Gl(gl) => unsafe { gl.TexParameterfv(target, pname, &mut result) },
-                Gl::Gles(gles) => unsafe { gles.TexParameterfv(target, pname, &mut result) },
+                Gl::Gl(gl) => unsafe { gl.GetTexParameterfv(target, pname, &mut result) },
+                Gl::Gles(gles) => unsafe { gles.GetTexParameterfv(target, pname, &mut result) },
             };
             result
         }
