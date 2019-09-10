@@ -51,8 +51,8 @@ pub mod gl {
         pub fn gen_textures(&self, n: GLsizei) -> Vec<GLuint> {
             let mut ids = vec![0 as GLuint; n as usize];
             match self {
-                Gl::Gl(gl) => unsafe { gl.GenFramebuffers(n, ids.as_mut_ptr()) },
-                Gl::Gles(gles) => unsafe { gles.GenFramebuffers(n, ids.as_mut_ptr()) },
+                Gl::Gl(gl) => unsafe { gl.GenTextures(n, ids.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GenTextures(n, ids.as_mut_ptr()) },
             }
             ids
         }
