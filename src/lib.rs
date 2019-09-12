@@ -1429,11 +1429,11 @@ pub mod gl {
             }
         }
 
-        pub fn client_wait_sync(&self, sync: GLsync, flags: GLbitfield, timeout: GLuint64) {
+        pub fn client_wait_sync(&self, sync: GLsync, flags: GLbitfield, timeout: GLuint64) -> GLenum {
             match self {
                 Gl::Gl(gl) => unsafe { gl.ClientWaitSync(sync as *const _, flags, timeout) },
                 Gl::Gles(gles) => unsafe { gles.ClientWaitSync(sync as *const _, flags, timeout) },
-            };
+            }
         }
 
         pub fn wait_sync(&self, sync: GLsync, flags: GLbitfield, timeout: GLuint64) {
@@ -1441,6 +1441,20 @@ pub mod gl {
                 Gl::Gl(gl) => unsafe { gl.WaitSync(sync as *const _, flags, timeout) },
                 Gl::Gles(gles) => unsafe { gles.WaitSync(sync as *const _, flags, timeout) },
             };
+        }
+
+        pub unsafe fn get_sync_iv(&self, sync: GLsync, pname: GLenum, buf_size: GLsizei, length: &mut GLsizei, values: &mut [GLint]) {
+            match self {
+                Gl::Gl(gl) => gl.GetSynciv(sync as *const _, pname, buf_size, length, values.as_mut_ptr()),
+                Gl::Gles(gles) => gles.GetSynciv(sync as *const _, pname, buf_size, length, values.as_mut_ptr()),
+            };
+        }
+
+        pub fn is_sync(&self, sync: GLsync) -> bool {
+            TRUE == match self {
+                Gl::Gl(gl) => unsafe { gl.IsSync(sync as *const _) as GLboolean },
+                Gl::Gles(gles) =>  unsafe { gles.IsSync(sync as *const _) as GLboolean },
+            }
         }
 
         pub fn delete_sync(&self, sync: GLsync) {
