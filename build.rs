@@ -28,6 +28,7 @@ fn main() {
 
     // GLES 3.0 bindings
     let gles_extensions = [
+        "GL_EXT_disjoint_timer_query",
         "GL_EXT_texture_filter_anisotropic",
         "GL_OES_texture_half_float",
     ];

@@ -1684,6 +1684,130 @@ pub mod gl {
                 },
             }
         }
+
+        pub fn gen_queries(&self, n: GLsizei) -> Vec<GLuint> {
+            if let Gl::Gles(gles) = self {
+                if !gles.GenQueriesEXT.is_loaded() {
+                    return Vec::new();
+                }
+            }
+            let mut result = vec![0 as GLuint; n as usize];
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GenQueries(n, result.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GenQueriesEXT(n, result.as_mut_ptr()) },
+            };
+            result
+        }
+
+        pub fn begin_query(&self, target: GLenum, id: GLuint) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.BeginQuery(target, id) },
+                Gl::Gles(gles) => {
+                    if gles.BeginQueryEXT.is_loaded() {
+                        unsafe { gles.BeginQueryEXT(target, id) }
+                    }
+                },
+            }
+        }
+
+        pub fn end_query(&self, target: GLenum) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.EndQuery(target) },
+                Gl::Gles(gles) => {
+                    if gles.EndQueryEXT.is_loaded() {
+                        unsafe { gles.EndQueryEXT(target) }
+                    }
+                },
+            }
+        }
+
+        pub fn delete_query(&self, ids: &[GLuint]) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.DeleteQueries(ids.len() as GLsizei, ids.as_ptr()) },
+                Gl::Gles(gles) => {
+                    if gles.DeleteQueriesEXT.is_loaded() {
+                        unsafe { gles.DeleteQueriesEXT(ids.len() as GLsizei, ids.as_ptr()) }
+                    }
+                },
+            }
+        }
+
+        pub fn is_query(&self, id: GLuint) -> bool {
+            TRUE == match self {
+                Gl::Gl(gl) => unsafe { gl.IsQuery(id) },
+                Gl::Gles(gles) => {
+                    match gles.IsQueryEXT.is_loaded() {
+                        true => unsafe { gles.IsQueryEXT(id) },
+                        false => FALSE,
+                    }
+                },
+            }
+        }
+
+        pub fn get_query_iv(&self, target: GLenum, pname: GLenum) -> i32 {
+            let mut result = 0;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetQueryiv(target, pname, &mut result) },
+                Gl::Gles(gles) => {
+                    if gles.GetQueryivEXT.is_loaded() {
+                        unsafe { gles.GetQueryivEXT(target, pname, &mut result) }
+                    }
+                },
+            };
+            result
+        }
+
+        pub fn get_query_object_iv(&self, id: GLuint, pname: GLenum) -> i32 {
+            let mut result = 0;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetQueryObjectiv(id, pname, &mut result) },
+                Gl::Gles(gles) => {
+                    if gles.GetQueryObjectivEXT.is_loaded() {
+                        unsafe { gles.GetQueryObjectivEXT(id, pname, &mut result) }
+                    }
+                },
+            }
+            result
+        }
+
+        pub fn get_query_object_uiv(&self, id: GLuint, pname: GLenum) -> u32 {
+            let mut result = 0;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetQueryObjectuiv(id, pname, &mut result) },
+                Gl::Gles(gles) => {
+                    if gles.GetQueryObjectuivEXT.is_loaded() {
+                        unsafe { gles.GetQueryObjectuivEXT(id, pname, &mut result) }
+                    }
+                },
+            }
+            result
+        }
+
+        pub fn get_query_object_i64v(&self, id: GLuint, pname: GLenum) -> i64 {
+            let mut result = 0;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetQueryObjecti64v(id, pname, &mut result) },
+                Gl::Gles(gles) => {
+                    if gles.GetQueryObjecti64vEXT.is_loaded() {
+                        unsafe { gles.GetQueryObjecti64vEXT(id, pname, &mut result) }
+                    }
+                },
+            }
+            result
+        }
+
+        pub fn get_query_object_ui64v(&self, id: GLuint, pname: GLenum) -> u64 {
+            let mut result = 0;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetQueryObjectui64v(id, pname, &mut result) },
+                Gl::Gles(gles) => {
+                    if gles.GetQueryObjectui64vEXT.is_loaded() {
+                        unsafe { gles.GetQueryObjectui64vEXT(id, pname, &mut result) }
+                    }
+                },
+            }
+            result
+        }
     }
 
     fn calculate_length(
