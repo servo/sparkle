@@ -1064,7 +1064,7 @@ pub mod gl {
                     gl.FramebufferTexture2D(target, attachment, textarget, texture, level)
                 },
                 Gl::Gles(gles) => unsafe {
-                    gles.FramebufferTexture2D(target, attachment, texture, texture, level)
+                    gles.FramebufferTexture2D(target, attachment, textarget, texture, level)
                 },
             }
         }
