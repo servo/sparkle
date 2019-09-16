@@ -1808,6 +1808,84 @@ pub mod gl {
             }
             result
         }
+
+        pub fn gen_samplers(&self, n: GLsizei) -> Vec<GLuint> {
+            let mut result = vec![0 as GLuint; n as usize];
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GenSamplers(n, result.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GenSamplers(n, result.as_mut_ptr()) },
+            };
+            result
+        }
+
+        pub fn delete_samplers(&self, samplers: &[GLuint]) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.DeleteSamplers(samplers.len() as GLsizei, samplers.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.DeleteSamplers(samplers.len() as GLsizei, samplers.as_ptr()) },
+            }
+        }
+
+        pub fn is_sampler(&self, sampler: GLuint) -> bool {
+            TRUE == match self {
+                Gl::Gl(gl) => unsafe { gl.IsSampler(sampler) },
+                Gl::Gles(gles) => unsafe { gles.IsSampler(sampler) },
+            }
+        }
+
+        pub fn bind_sampler(&self, target: GLenum, sampler: GLuint) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.BindSampler(target, sampler) },
+                Gl::Gles(gles) => unsafe { gles.BindSampler(target, sampler) },
+            }
+        }
+
+        pub fn get_sampler_parameter_iv(&self, sampler: GLuint, pname: GLenum) -> Vec<GLint> {
+            let mut result = vec![0 as GLint];
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetSamplerParameteriv(sampler, pname, result.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GetSamplerParameteriv(sampler, pname, result.as_mut_ptr()) },
+            }
+            result
+        }
+
+        pub fn get_sampler_parameter_fv(&self, sampler: GLuint, pname: GLenum) -> Vec<GLfloat> {
+            let mut result = vec![0.0_f32 as GLfloat];
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetSamplerParameterfv(sampler, pname, result.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GetSamplerParameterfv(sampler, pname, result.as_mut_ptr()) },
+            }
+            result
+        }
+
+        pub fn sampler_parameter_i(&self, sampler: GLuint, pname: GLenum, param: GLint) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.SamplerParameteri(sampler, pname, param) },
+                Gl::Gles(gles) => unsafe { gles.SamplerParameteri(sampler, pname, param) },
+            }
+        }
+
+        pub fn sampler_parameter_f(&self, sampler: GLuint, pname: GLenum, param: GLfloat) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.SamplerParameterf(sampler, pname, param) },
+                Gl::Gles(gles) => unsafe { gles.SamplerParameterf(sampler, pname, param) },
+            }
+        }
+
+        pub fn sampler_parameter_iv(&self, sampler: GLuint, pname: GLenum, params: &[GLint]) {
+            assert!(!params.is_empty());
+            match self {
+                Gl::Gl(gl) => unsafe { gl.SamplerParameteriv(sampler, pname, params.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.SamplerParameteriv(sampler, pname, params.as_ptr()) },
+            }
+        }
+
+        pub fn sampler_parameter_fv(&self, sampler: GLuint, pname: GLenum, params: &[GLfloat]) {
+            assert!(!params.is_empty());
+            match self {
+                Gl::Gl(gl) => unsafe { gl.SamplerParameterfv(sampler, pname, params.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.SamplerParameterfv(sampler, pname, params.as_ptr()) },
+            }
+        }
     }
 
     fn calculate_length(
