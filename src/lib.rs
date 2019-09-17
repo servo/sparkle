@@ -1721,7 +1721,7 @@ pub mod gl {
             }
         }
 
-        pub fn delete_query(&self, ids: &[GLuint]) {
+        pub fn delete_queries(&self, ids: &[GLuint]) {
             match self {
                 Gl::Gl(gl) => unsafe { gl.DeleteQueries(ids.len() as GLsizei, ids.as_ptr()) },
                 Gl::Gles(gles) => {
