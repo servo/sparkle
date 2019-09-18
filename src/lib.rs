@@ -1443,11 +1443,13 @@ pub mod gl {
             };
         }
 
-        pub unsafe fn get_sync_iv(&self, sync: GLsync, pname: GLenum, buf_size: GLsizei, length: &mut GLsizei, values: &mut [GLint]) {
+        pub fn get_sync_iv(&self, sync: GLsync, pname: GLenum) -> Vec<GLint> {
+            let mut result = vec![0 as GLint];
             match self {
-                Gl::Gl(gl) => gl.GetSynciv(sync as *const _, pname, buf_size, length, values.as_mut_ptr()),
-                Gl::Gles(gles) => gles.GetSynciv(sync as *const _, pname, buf_size, length, values.as_mut_ptr()),
+                Gl::Gl(gl) => unsafe { gl.GetSynciv(sync as *const _, pname, result.len() as _, ptr::null_mut(), result.as_mut_ptr()); },
+                Gl::Gles(gles) => unsafe { gles.GetSynciv(sync as *const _, pname, result.len() as _, ptr::null_mut(), result.as_mut_ptr()); },
             };
+            result
         }
 
         pub fn is_sync(&self, sync: GLsync) -> bool {
