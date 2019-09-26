@@ -1922,6 +1922,95 @@ pub mod gl {
                 Gl::Gles(gles) => unsafe { gles.SamplerParameterfv(sampler, pname, params.as_ptr()) },
             }
         }
+
+        pub fn gen_transform_feedbacks(&self) -> u32 {
+            let mut ids = vec![0 as GLuint];
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GenTransformFeedbacks(ids.len() as _, ids.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GenTransformFeedbacks(ids.len() as _, ids.as_mut_ptr()) },
+            }
+            ids[0]
+        }
+
+        pub fn delete_transform_feedbacks(&self, id: GLuint) {
+            let ids = vec![id];
+            match self {
+                Gl::Gl(gl) => unsafe { gl.DeleteTransformFeedbacks(ids.len() as _, ids.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.DeleteTransformFeedbacks(ids.len() as _, ids.as_ptr()) },
+            }
+        }
+
+        pub fn is_transform_feedback(&self, id: GLuint) -> bool {
+            TRUE == match self {
+                Gl::Gl(gl) => unsafe { gl.IsTransformFeedback(id) },
+                Gl::Gles(gles) => unsafe { gles.IsTransformFeedback(id) },
+            }
+        }
+
+        pub fn bind_transform_feedback(&self, target: GLenum, id: u32) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.BindTransformFeedback(target, id) },
+                Gl::Gles(gles) => unsafe { gles.BindTransformFeedback(target, id) },
+            }
+        }
+
+        pub fn begin_transform_feedback(&self, mode: GLenum) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.BeginTransformFeedback(mode) },
+                Gl::Gles(gles) => unsafe { gles.BeginTransformFeedback(mode) },
+            }
+        }
+
+        pub fn end_transform_feedback(&self) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.EndTransformFeedback() },
+                Gl::Gles(gles) => unsafe { gles.EndTransformFeedback() },
+            }
+        }
+
+        pub fn pause_transform_feedback(&self) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.PauseTransformFeedback() },
+                Gl::Gles(gles) => unsafe { gles.PauseTransformFeedback() },
+            }
+        }
+
+        pub fn resume_transform_feedback(&self) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.ResumeTransformFeedback() },
+                Gl::Gles(gles) => unsafe { gles.ResumeTransformFeedback() },
+            }
+        }
+
+        pub fn get_transform_feedback_varying(&self, program: GLuint, index: GLuint) -> (i32, u32, String) {
+            let mut length = 0;
+            let buf_size = 128;
+            let mut name = vec![0 as c_char; buf_size as usize];
+            let mut size = 0;
+            let mut ty = 0;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetTransformFeedbackVarying(program, index, buf_size, &mut length, &mut size, &mut ty, name.as_mut_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GetTransformFeedbackVarying(program, index, buf_size, &mut length, &mut size, &mut ty, name.as_mut_ptr()) },
+            }
+            let name: &[u8] = unsafe { std::slice::from_raw_parts(name.as_ptr() as _, length as usize) };
+            let name = String::from_utf8(name.to_vec()).unwrap();
+            (size, ty, name)
+        }
+
+        pub fn transform_feedback_varyings(&self, program: GLuint, varyings: &[String], buffer_mode: GLenum) {
+            let c_varyings = varyings
+                .iter()
+                .map(|varying| {
+                    std::ffi::CString::new("_u".to_owned() + varying.as_str()).unwrap()
+                })
+                .collect::<Vec<_>>();
+            let pointers: Vec<*const i8> =
+                c_varyings.iter().map(|p| p.as_ptr()).collect();
+            match self {
+                Gl::Gl(gl) => unsafe { gl.TransformFeedbackVaryings(program, varyings.len() as _, pointers.as_ptr() as _, buffer_mode) },
+                Gl::Gles(gles) => unsafe { gles.TransformFeedbackVaryings(program, varyings.len() as _, pointers.as_ptr() as _, buffer_mode) },
+            }
+        }
     }
 
     fn calculate_length(
