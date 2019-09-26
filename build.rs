@@ -13,6 +13,7 @@ fn main() {
     // OpenGL 3.3 bindings
     let gl_extensions = [
         "GL_APPLE_vertex_array_object",
+        "GL_ARB_texture_rectangle",
         "GL_EXT_texture_filter_anisotropic",
     ];
     let gl_reg = Registry::new(
