@@ -342,6 +342,26 @@ pub mod gl {
             }
         }
 
+        pub fn map_buffer_range(
+            &self,
+            target: GLenum,
+            offset: GLintptr,
+            length: GLsizeiptr,
+            access: GLbitfield,
+        ) -> *mut c_void {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.MapBufferRange(target, offset, length, access) },
+                Gl::Gles(gles) => unsafe { gles.MapBufferRange(target, offset, length, access) },
+            }
+        }
+
+        pub fn unmap_buffer(&self, target: GLenum) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.UnmapBuffer(target); },
+                Gl::Gles(gles) => unsafe { gles.UnmapBuffer(target); },
+            }
+        }
+
         pub fn link_program(&self, program: GLuint) {
             match self {
                 Gl::Gl(gl) => unsafe { gl.LinkProgram(program) },
