@@ -342,6 +342,20 @@ pub mod gl {
             }
         }
 
+        pub fn copy_buffer_sub_data(
+            &self,
+            read_target: u32,
+            write_target: u32,
+            read_offset: isize,
+            write_offset: isize,
+            size: isize,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.CopyBufferSubData(read_target, write_target, read_offset, write_offset, size) },
+                Gl::Gles(gles) => unsafe { gles.CopyBufferSubData(read_target, write_target, read_offset, write_offset, size) },
+            }
+        }
+
         pub fn map_buffer_range(
             &self,
             target: GLenum,
