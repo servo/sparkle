@@ -32,6 +32,7 @@ fn main() {
         "GL_EXT_disjoint_timer_query",
         "GL_EXT_texture_filter_anisotropic",
         "GL_OES_texture_half_float",
+        "GL_OES_vertex_array_object",
     ];
     let gles_reg = Registry::new(
         Api::Gles2,
