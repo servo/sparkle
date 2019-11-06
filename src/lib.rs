@@ -2004,7 +2004,7 @@ pub mod gl {
                     std::ffi::CString::new("_u".to_owned() + varying.as_str()).unwrap()
                 })
                 .collect::<Vec<_>>();
-            let pointers: Vec<*const i8> =
+            let pointers: Vec<*const c_char> =
                 c_varyings.iter().map(|p| p.as_ptr()).collect();
             match self {
                 Gl::Gl(gl) => unsafe { gl.TransformFeedbackVaryings(program, varyings.len() as _, pointers.as_ptr() as _, buffer_mode) },
