@@ -1437,6 +1437,42 @@ pub mod gl {
             }
         }
 
+        pub fn read_pixels_into_pixel_pack_buffer(
+            &self,
+            x: GLint,
+            y: GLint,
+            width: GLsizei,
+            height: GLsizei,
+            format: GLenum,
+            pixel_type: GLenum,
+            buffer_byte_offset: usize,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.ReadPixels(
+                        x,
+                        y,
+                        width,
+                        height,
+                        format,
+                        pixel_type,
+                        buffer_byte_offset as *mut _,
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.ReadPixels(
+                        x,
+                        y,
+                        width,
+                        height,
+                        format,
+                        pixel_type,
+                        buffer_byte_offset as *mut _,
+                    )
+                },
+            }
+        }
+
         pub fn read_pixels(
             &self,
             x: GLint,
