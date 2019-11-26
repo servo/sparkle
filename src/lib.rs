@@ -1437,7 +1437,12 @@ pub mod gl {
             }
         }
 
-        pub fn read_pixels_into_pixel_pack_buffer(
+        /// Used when a WebGLBuffer object is bound to PIXEL_PACK_BUFFER.
+        /// Reads the current pixel buffer into the bound buffer object
+        /// at the provided offset. Unsafe because no validation is performed
+        /// to ensure that there is actually a buffer object bound; GL
+        /// will write at an invalid pointer value in this case.
+        pub unsafe fn read_pixels_into_pixel_pack_buffer(
             &self,
             x: GLint,
             y: GLint,
