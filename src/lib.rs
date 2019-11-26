@@ -1453,7 +1453,7 @@ pub mod gl {
             buffer_byte_offset: usize,
         ) {
             match self {
-                Gl::Gl(gl) => unsafe {
+                Gl::Gl(gl) =>
                     gl.ReadPixels(
                         x,
                         y,
@@ -1462,9 +1462,8 @@ pub mod gl {
                         format,
                         pixel_type,
                         buffer_byte_offset as *mut _,
-                    )
-                },
-                Gl::Gles(gles) => unsafe {
+                    ),
+                Gl::Gles(gles) =>
                     gles.ReadPixels(
                         x,
                         y,
@@ -1473,8 +1472,7 @@ pub mod gl {
                         format,
                         pixel_type,
                         buffer_byte_offset as *mut _,
-                    )
-                },
+                    ),
             }
         }
 
