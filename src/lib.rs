@@ -1259,6 +1259,192 @@ pub mod gl {
             }
         }
 
+        pub fn get_uniform_block_index(&self, program: GLuint, name: &str) -> GLuint {
+            let name = CString::new(name).unwrap();
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetUniformBlockIndex(program, name.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GetUniformBlockIndex(program, name.as_ptr()) },
+            }
+        }
+
+        pub fn get_uniform_indices(&self, program: GLuint, names: &[&str]) -> Vec<GLuint> {
+            let count = names.len() as GLsizei;
+            let c_names = names
+                .iter()
+                .map(|&name| std::ffi::CString::new(name).unwrap())
+                .collect::<Vec<_>>();
+            let c_name_ptrs = c_names
+                .iter()
+                .map(|name| name.as_ptr())
+                .collect::<Vec<_>>();
+
+            let mut indices = vec![0 as GLuint; names.len()];
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.GetUniformIndices(
+                        program,
+                        count,
+                        c_name_ptrs.as_ptr(),
+                        indices.as_mut_ptr(),
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.GetUniformIndices(
+                        program,
+                        count,
+                        c_name_ptrs.as_ptr(),
+                        indices.as_mut_ptr(),
+                    )
+                },
+            }
+            indices
+        }
+
+        pub fn get_active_uniforms_iv(
+            &self,
+            program: GLuint,
+            uniforms: &[GLuint],
+            pname: GLenum,
+        ) -> Vec<GLint> {
+            let mut results = vec![0 as GLint; uniforms.len()];
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.GetActiveUniformsiv(
+                        program,
+                        uniforms.len() as GLsizei,
+                        uniforms.as_ptr(),
+                        pname,
+                        results.as_mut_ptr(),
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.GetActiveUniformsiv(
+                        program,
+                        uniforms.len() as GLsizei,
+                        uniforms.as_ptr(),
+                        pname,
+                        results.as_mut_ptr(),
+                    )
+                },
+            }
+            results
+        }
+
+        pub fn get_active_uniform_block_iv(
+            &self,
+            program: GLuint,
+            index: GLuint,
+            pname: GLenum,
+        ) -> Vec<GLint> {
+            let buf_size = match pname {
+                ffi::UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES => {
+                    self.get_active_uniform_block_iv(
+                        program,
+                        index,
+                        ffi::UNIFORM_BLOCK_ACTIVE_UNIFORMS,
+                    )[0] as usize
+                },
+                _ => 1,
+            };
+            let mut results = vec![0 as i32; buf_size];
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.GetActiveUniformBlockiv(
+                        program,
+                        index,
+                        pname,
+                        results.as_mut_ptr(),
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.GetActiveUniformBlockiv(
+                        program,
+                        index,
+                        pname,
+                        results.as_mut_ptr(),
+                    )
+                },
+            }
+            results
+        }
+
+        pub fn get_active_uniform_block_name(&self, program: GLuint, index: GLuint) -> String {
+            let buf_size = self.get_active_uniform_block_iv(program, index, ffi::UNIFORM_BLOCK_NAME_LENGTH)[0];
+            let mut name = vec![0 as u8; buf_size as usize];
+            let mut length: GLsizei = 0;
+
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.GetActiveUniformBlockName(
+                        program,
+                        index,
+                        buf_size,
+                        &mut length,
+                        name.as_mut_ptr() as *mut GLchar,
+                    );
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.GetActiveUniformBlockName(
+                        program,
+                        index,
+                        buf_size,
+                        &mut length,
+                        name.as_mut_ptr() as *mut GLchar,
+                    );
+                },
+            }
+
+            name.truncate(if length > 0 { length as usize } else { 0 });
+            String::from_utf8(name).unwrap()
+        }
+
+        pub fn uniform_block_binding(
+            &self,
+            program: GLuint,
+            uniform_block_index: GLuint,
+            uniform_block_binding: GLuint,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformBlockBinding(
+                        program,
+                        uniform_block_index,
+                        uniform_block_binding,
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformBlockBinding(
+                        program,
+                        uniform_block_index,
+                        uniform_block_binding,
+                    )
+                },
+            }
+        }
+
+        pub fn bind_buffer_base(&self, program: GLenum, index: GLuint, buffer: GLuint) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.BindBufferBase(program, index, buffer) },
+                Gl::Gles(gles) => unsafe { gles.BindBufferBase(program, index, buffer) },
+            }
+        }
+
+        pub fn bind_buffer_range(
+            &self,
+            program: GLenum,
+            index: GLuint,
+            buffer: GLuint,
+            offset: GLintptr,
+            size: GLsizeiptr,
+        ) {
+            assert!(offset >= 0);
+            assert!(size >= 0);
+            match self {
+                Gl::Gl(gl) => unsafe { gl.BindBufferRange(program, index, buffer, offset, size) },
+                Gl::Gles(gles) => unsafe { gles.BindBufferRange(program, index, buffer, offset, size) },
+            }
+        }
+
         pub fn get_program_info_log(&self, program: GLuint) -> String {
             let mut max_len = [0];
             unsafe {
