@@ -501,6 +501,18 @@ pub mod gl {
             }
         }
 
+        pub unsafe fn get_uniform_uiv(
+            &self,
+            program: GLuint,
+            location: GLint,
+            result: &mut [GLuint],
+        ) {
+            match self {
+                Gl::Gl(gl) => gl.GetUniformuiv(program, location, result.as_mut_ptr()),
+                Gl::Gles(gles) => gles.GetUniformuiv(program, location, result.as_mut_ptr()),
+            }
+        }
+
         pub unsafe fn get_uniform_fv(
             &self,
             program: GLuint,
@@ -1762,6 +1774,14 @@ pub mod gl {
             }
         }
 
+        pub fn uniform_1uiv(&self, location: GLint, values: &[u32]) {
+            let len = values.len() as GLsizei;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.Uniform1uiv(location, len, values.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.Uniform1uiv(location, len, values.as_ptr()) },
+            }
+        }
+
         pub fn uniform_2f(&self, location: GLint, v0: GLfloat, v1: GLfloat) {
             match self {
                 Gl::Gl(gl) => unsafe { gl.Uniform2f(location, v0, v1) },
@@ -1796,6 +1816,14 @@ pub mod gl {
             match self {
                 Gl::Gl(gl) => unsafe { gl.Uniform2ui(location, v0, v1) },
                 Gl::Gles(gles) => unsafe { gles.Uniform2ui(location, v0, v1) },
+            }
+        }
+
+        pub fn uniform_2uiv(&self, location: GLint, values: &[u32]) {
+            let len = values.len() as GLsizei / 2;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.Uniform2uiv(location, len, values.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.Uniform2uiv(location, len, values.as_ptr()) },
             }
         }
 
@@ -1836,6 +1864,14 @@ pub mod gl {
             }
         }
 
+        pub fn uniform_3uiv(&self, location: GLint, values: &[u32]) {
+            let len = values.len() as GLsizei / 3;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.Uniform3uiv(location, len, values.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.Uniform3uiv(location, len, values.as_ptr()) },
+            }
+        }
+
         pub fn uniform_4f(&self, location: GLint, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat) {
             match self {
                 Gl::Gl(gl) => unsafe { gl.Uniform4f(location, x, y, z, w) },
@@ -1862,6 +1898,14 @@ pub mod gl {
             match self {
                 Gl::Gl(gl) => unsafe { gl.Uniform4ui(location, x, y, z, w) },
                 Gl::Gles(gles) => unsafe { gles.Uniform4ui(location, x, y, z, w) },
+            }
+        }
+
+        pub fn uniform_4uiv(&self, location: GLint, values: &[u32]) {
+            let len = values.len() as GLsizei / 4;
+            match self {
+                Gl::Gl(gl) => unsafe { gl.Uniform4uiv(location, len, values.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.Uniform4uiv(location, len, values.as_ptr()) },
             }
         }
 
