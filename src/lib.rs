@@ -440,6 +440,34 @@ pub mod gl {
             }
         }
 
+        pub fn vertex_attrib_4i(
+            &self,
+            index: GLuint,
+            x: GLint,
+            y: GLint,
+            z: GLint,
+            w: GLint,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.VertexAttribI4i(index, x, y, z, w) },
+                Gl::Gles(gles) => unsafe { gles.VertexAttribI4i(index, x, y, z, w) },
+            }
+        }
+
+        pub fn vertex_attrib_4ui(
+            &self,
+            index: GLuint,
+            x: GLuint,
+            y: GLuint,
+            z: GLuint,
+            w: GLuint,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.VertexAttribI4ui(index, x, y, z, w) },
+                Gl::Gles(gles) => unsafe { gles.VertexAttribI4ui(index, x, y, z, w) },
+            }
+        }
+
         pub fn vertex_attrib_pointer_f32(
             &self,
             index: GLuint,
