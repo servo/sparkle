@@ -1984,6 +1984,85 @@ pub mod gl {
             }
         }
 
+        pub fn uniform_matrix_3x2fv(&self, location: GLint, transpose: bool, values: &[f32]) {
+            let len = values.len() as GLsizei / (3 * 2);
+            let transpose = transpose as GLboolean;
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformMatrix3x2fv(location, len, transpose, values.as_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformMatrix3x2fv(location, len, transpose, values.as_ptr())
+                },
+            }
+        }
+
+        pub fn uniform_matrix_4x2fv(&self, location: GLint, transpose: bool, values: &[f32]) {
+            let len = values.len() as GLsizei / (4 * 2);
+            let transpose = transpose as GLboolean;
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformMatrix4x2fv(location, len, transpose, values.as_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformMatrix4x2fv(location, len, transpose, values.as_ptr())
+                },
+            }
+        }
+
+        pub fn uniform_matrix_2x3fv(&self, location: GLint, transpose: bool, values: &[f32]) {
+            let len = values.len() as GLsizei / (2 * 3);
+            let transpose = transpose as GLboolean;
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformMatrix2x3fv(location, len, transpose, values.as_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformMatrix2x3fv(location, len, transpose, values.as_ptr())
+                },
+            }
+        }
+
+        pub fn uniform_matrix_4x3fv(&self, location: GLint, transpose: bool, values: &[f32]) {
+            let len = values.len() as GLsizei / (4 * 3);
+            let transpose = transpose as GLboolean;
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformMatrix4x3fv(location, len, transpose, values.as_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformMatrix4x3fv(location, len, transpose, values.as_ptr())
+                },
+            }
+        }
+
+        pub fn uniform_matrix_2x4fv(&self, location: GLint, transpose: bool, values: &[f32]) {
+            let len = values.len() as GLsizei / (2 * 4);
+            let transpose = transpose as GLboolean;
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformMatrix2x4fv(location, len, transpose, values.as_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformMatrix2x4fv(location, len, transpose, values.as_ptr())
+                },
+            }
+        }
+
+        pub fn uniform_matrix_3x4fv(&self, location: GLint, transpose: bool, values: &[f32]) {
+            let len = values.len() as GLsizei / (3 * 4);
+            let transpose = transpose as GLboolean;
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.UniformMatrix3x4fv(location, len, transpose, values.as_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.UniformMatrix3x4fv(location, len, transpose, values.as_ptr())
+                },
+            }
+        }
+
+
         pub fn use_program(&self, program: GLuint) {
             match self {
                 Gl::Gl(gl) => unsafe { gl.UseProgram(program) },
