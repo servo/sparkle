@@ -2387,6 +2387,40 @@ pub mod gl {
                 Gl::Gles(gles) => unsafe { gles.TransformFeedbackVaryings(program, varyings.len() as _, pointers.as_ptr() as _, buffer_mode) },
             }
         }
+
+        pub fn clear_buffer_iv(&self, buffer: GLenum, draw_buffer: GLint, value: &[GLint]) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.ClearBufferiv(buffer, draw_buffer, value.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.ClearBufferiv(buffer, draw_buffer, value.as_ptr()) },
+            }
+        }
+
+        pub fn clear_buffer_uiv(&self, buffer: GLenum, draw_buffer: GLint, value: &[GLuint]) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.ClearBufferuiv(buffer, draw_buffer, value.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.ClearBufferuiv(buffer, draw_buffer, value.as_ptr()) },
+            }
+        }
+
+        pub fn clear_buffer_fv(&self, buffer: GLenum, draw_buffer: GLint, value: &[GLfloat]) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.ClearBufferfv(buffer, draw_buffer, value.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.ClearBufferfv(buffer, draw_buffer, value.as_ptr()) },
+            }
+        }
+
+        pub fn clear_buffer_fi(
+            &self,
+            buffer: GLenum,
+            draw_buffer: GLint,
+            depth: GLfloat,
+            stencil: GLint,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.ClearBufferfi(buffer, draw_buffer, depth, stencil) },
+                Gl::Gles(gles) => unsafe { gles.ClearBufferfi(buffer, draw_buffer, depth, stencil) },
+            }
+        }
     }
 
     fn calculate_length(
