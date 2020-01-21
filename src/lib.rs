@@ -907,6 +907,23 @@ pub mod gl {
             result
         }
 
+        pub fn get_internal_format_iv(
+            &self,
+            target: GLenum,
+            internalformat: GLenum,
+            pname: GLenum,
+            result: &mut [GLint],
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.GetInternalformativ(target, internalformat, pname, result.len() as _, result.as_mut_ptr())
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.GetInternalformativ(target, internalformat, pname, result.len() as _, result.as_mut_ptr())
+                },
+            }
+        }
+
         pub fn get_renderbuffer_parameter_iv(&self, target: GLenum, pname: GLenum) -> GLint {
             let mut result = 0;
             match self {
@@ -1156,6 +1173,24 @@ pub mod gl {
                 },
                 Gl::Gles(gles) => unsafe {
                     gles.RenderbufferStorage(target, internalformat, width, height)
+                },
+            }
+        }
+
+        pub fn renderbuffer_storage_multisample(
+            &self,
+            target: GLenum,
+            samples: GLsizei,
+            internalformat: GLenum,
+            width: GLsizei,
+            height: GLsizei,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.RenderbufferStorageMultisample(target, samples, internalformat, width, height)
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.RenderbufferStorageMultisample(target, samples, internalformat, width, height)
                 },
             }
         }
