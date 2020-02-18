@@ -1160,6 +1160,60 @@ pub mod gl {
             }
         }
 
+        pub fn invalidate_framebuffer(&self, target: GLenum, attachments: &[GLenum]) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.InvalidateFramebuffer(
+                        target,
+                        attachments.len() as GLsizei,
+                        attachments.as_ptr(),
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.InvalidateFramebuffer(
+                        target,
+                        attachments.len() as GLsizei,
+                        attachments.as_ptr(),
+                    )
+                },
+            }
+        }
+
+        pub fn invalidate_sub_framebuffer(
+            &self,
+            target: GLenum,
+            attachments: &[GLenum],
+            x: i32,
+            y: i32,
+            width: GLsizei,
+            height: GLsizei,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.InvalidateSubFramebuffer(
+                        target,
+                        attachments.len() as GLsizei,
+                        attachments.as_ptr(),
+                        x,
+                        y,
+                        width,
+                        height,
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.InvalidateSubFramebuffer(
+                        target,
+                        attachments.len() as GLsizei,
+                        attachments.as_ptr(),
+                        x,
+                        y,
+                        width,
+                        height,
+                    )
+                },
+            }
+        }
+
         pub fn renderbuffer_storage(
             &self,
             target: GLenum,

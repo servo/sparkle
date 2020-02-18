@@ -17,6 +17,7 @@ fn main() {
         "GL_EXT_texture_filter_anisotropic",
         "GL_ARB_transform_feedback2",
         "GL_ARB_internalformat_query",
+        "GL_ARB_invalidate_subdata",
     ];
     let gl_reg = Registry::new(
         Api::Gl,
