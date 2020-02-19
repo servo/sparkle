@@ -1160,6 +1160,36 @@ pub mod gl {
             }
         }
 
+        pub fn framebuffer_texture_layer(
+            &self,
+            target: GLenum,
+            attachment: GLenum,
+            texture: GLuint,
+            level: GLint,
+            layer: GLint,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.FramebufferTextureLayer(
+                        target,
+                        attachment,
+                        texture,
+                        level,
+                        layer,
+                    )
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.FramebufferTextureLayer(
+                        target,
+                        attachment,
+                        texture,
+                        level,
+                        layer,
+                    )
+                },
+            }
+        }
+
         pub fn invalidate_framebuffer(&self, target: GLenum, attachments: &[GLenum]) {
             match self {
                 Gl::Gl(gl) => unsafe {
