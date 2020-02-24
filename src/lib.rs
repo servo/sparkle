@@ -1043,6 +1043,13 @@ pub mod gl {
             }
         }
 
+        pub fn read_buffer(&self, buffer: GLenum) {
+            match self {
+                Gl::Gl(gl) => unsafe { gl.ReadBuffer(buffer) },
+                Gl::Gles(gles) => unsafe { gles.ReadBuffer(buffer) },
+            }
+        }
+
         pub fn draw_buffers(&self, bufs: &[GLenum]) {
             let len = bufs.len() as GLsizei;
             match self {
