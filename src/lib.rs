@@ -1417,6 +1417,14 @@ pub mod gl {
             }
         }
 
+        pub fn get_frag_data_location(&self, program: GLuint, name: &str) -> c_int {
+            let name = CString::new(name).unwrap();
+            match self {
+                Gl::Gl(gl) => unsafe { gl.GetFragDataLocation(program, name.as_ptr()) },
+                Gl::Gles(gles) => unsafe { gles.GetFragDataLocation(program, name.as_ptr()) },
+            }
+        }
+
         pub fn get_uniform_location(&self, program: GLuint, name: &str) -> c_int {
             let name = CString::new(name).unwrap();
             match self {
