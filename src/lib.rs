@@ -284,6 +284,43 @@ pub mod gl {
             }
         }
 
+        pub fn tex_storage_2d(
+            &self,
+            target: GLenum,
+            levels: GLsizei,
+            internal_format: GLenum,
+            width: GLsizei,
+            height: GLsizei,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.TexStorage2D(target, levels, internal_format, width, height)
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.TexStorage2D(target, levels, internal_format, width, height)
+                },
+            }
+        }
+
+        pub fn tex_storage_3d(
+            &self,
+            target: GLenum,
+            levels: GLsizei,
+            internal_format: GLenum,
+            width: GLsizei,
+            height: GLsizei,
+            depth: GLsizei,
+        ) {
+            match self {
+                Gl::Gl(gl) => unsafe {
+                    gl.TexStorage3D(target, levels, internal_format, width, height, depth)
+                },
+                Gl::Gles(gles) => unsafe {
+                    gles.TexStorage3D(target, levels, internal_format, width, height, depth)
+                },
+            }
+        }
+
         pub fn generate_mipmap(&self, target: GLenum) {
             match self {
                 Gl::Gl(gl) => unsafe { gl.GenerateMipmap(target) },
