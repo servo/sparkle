@@ -1759,6 +1759,30 @@ pub mod gl {
             }
         }
 
+        pub unsafe fn get_integer64_v(&self, name: GLenum, result: &mut [GLint64]) {
+            assert!(!result.is_empty());
+            match self {
+                Gl::Gl(gl) => gl.GetInteger64v(name, result.as_mut_ptr()),
+                Gl::Gles(gles) => gles.GetInteger64v(name, result.as_mut_ptr()),
+            }
+        }
+
+        pub unsafe fn get_integeri_v(&self, name: GLenum, index: GLuint, result: &mut [GLint]) {
+            assert!(!result.is_empty());
+            match self {
+                Gl::Gl(gl) => gl.GetIntegeri_v(name, index, result.as_mut_ptr()),
+                Gl::Gles(gles) => gles.GetIntegeri_v(name, index, result.as_mut_ptr()),
+            }
+        }
+
+        pub unsafe fn get_integer64i_v(&self, name: GLenum, index: GLuint, result: &mut [GLint64]) {
+            assert!(!result.is_empty());
+            match self {
+                Gl::Gl(gl) => gl.GetInteger64i_v(name, index, result.as_mut_ptr()),
+                Gl::Gles(gles) => gles.GetInteger64i_v(name, index, result.as_mut_ptr()),
+            }
+        }
+
         pub unsafe fn get_boolean_v(&self, name: GLenum, result: &mut [GLboolean]) {
             assert!(!result.is_empty());
             match self {
