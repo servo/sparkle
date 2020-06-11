@@ -23,6 +23,11 @@ pub mod gl {
         Gles(self::ffi_gles::Gles2),
     }
 
+    pub enum TexImageSource<'a> {
+        Pixels(Option<&'a [u8]>),
+        BufferOffset(i64),
+    }
+
     impl Gl {
         pub fn get_type(&self) -> GlType {
             match self {
@@ -115,9 +120,19 @@ pub mod gl {
             border: GLint,
             format: GLenum,
             ty: GLenum,
-            opt_data: Option<&[u8]>,
+            source: TexImageSource,
         ) {
-            let data = opt_data.map(|d| d.as_ptr()).unwrap_or(ptr::null()) as *const _;
+            let data = match source {
+                TexImageSource::Pixels(pixels) => {
+                    pixels.map(|d| d.as_ptr()).unwrap_or(ptr::null()) as *const _
+                },
+                TexImageSource::BufferOffset(offset) => unsafe {
+                    let mut buffer = [0];
+                    self.get_integer_v(PIXEL_UNPACK_BUFFER_BINDING, &mut buffer);
+                    assert!(buffer[0] != 0);
+                    offset as *const _
+                }
+            };
             match self {
                 Gl::Gl(gl) => unsafe {
                     gl.TexImage2D(
