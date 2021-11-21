@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [auto]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux-ci:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Cargo test
+        run: cargo test
